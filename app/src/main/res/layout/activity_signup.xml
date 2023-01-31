@@ -58,12 +58,14 @@
         android:hint="Name"
         android:inputType="textPersonName"
         android:textColor="@android:color/black" />
+
     <Button
         android:id="@+id/btn_join"
-        android:layout_width="wrap_content"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@android:color/white"
+        android:background="#809A98"
         android:text="Join"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        app:iconTint="#FFFFFF" />
 </LinearLayout>

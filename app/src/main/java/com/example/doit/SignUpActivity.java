@@ -1,5 +1,6 @@
 package com.example.doit;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
                             finish();
                         } else {
                             // 계정이 중복된 경우
+                            Log.d("task",task.getException().getMessage()+"");
                             Toast.makeText(SignUpActivity.this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
