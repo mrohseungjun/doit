@@ -33,6 +33,7 @@ public class LogInActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount gsa;
 
+
     private SignInButton btnGoogleLogin;
     private Button btnLogoutGoogle;
 
@@ -51,6 +52,8 @@ public class LogInActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
         buttonSignUp = (Button) findViewById(R.id.btn_signup);
+
+
 
         // Google 로그인을 앱에 통합
         // GoogleSignInOptions 개체를 구성할 때 requestIdToken을 호출
@@ -129,7 +132,7 @@ public class LogInActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         Toast.makeText(LogInActivity.this, R.string.success_login, Toast.LENGTH_SHORT).show();
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        FirebaseUser  user = firebaseAuth.getCurrentUser();
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
@@ -193,6 +196,8 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        FirebaseUser  user = firebaseAuth.getCurrentUser();
+        updateUI(user);
     }
     @Override
     protected void onStop() {
