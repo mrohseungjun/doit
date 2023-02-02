@@ -1,12 +1,18 @@
 package com.example.doit;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 
 
 import android.content.Intent;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,9 +44,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class LogInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
+
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount gsa;
     private static final String TAG = "FacebookLogin";
@@ -64,6 +77,7 @@ public class LogInActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
         buttonSignUp = (Button) findViewById(R.id.btn_signup);
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -132,10 +146,10 @@ public class LogInActivity extends AppCompatActivity {
         buttonLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getHashKey();
                 if (!editTextEmail.getText().toString().equals("") && !editTextPassword.getText().toString().equals("")) {
                     loginUser(editTextEmail.getText().toString(), editTextPassword.getText().toString());
                 } else {
+                    getHashKey();
                     Toast.makeText(LogInActivity.this, "계정과 비밀번호를 입력하세요.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -165,6 +179,7 @@ public class LogInActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach a listener.
@@ -276,6 +291,26 @@ public class LogInActivity extends AppCompatActivity {
         super.onStop();
         if (firebaseAuthListener != null) {
             firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+        }
+    }
+    private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
         }
     }
 
