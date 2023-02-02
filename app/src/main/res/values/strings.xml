@@ -4,4 +4,9 @@
     <string name="failed_login">구글 로그인 실패</string>
     <string name="success_logout">로그아웃 되었습니다</string>
     <string name="status_login">이미 로그인 되어있습니다</string>
+
+    <string name="facebook_app_id">1113819209299366</string>
+    <string name="fb_login_protocol_scheme">fb1113819209299366</string>
+    <string name="facebook_client_token">f20ca552b721aad7059d0ffa5247a1f3</string>
+
 </resources>

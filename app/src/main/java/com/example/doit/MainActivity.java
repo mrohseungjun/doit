@@ -36,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         btnLogoutGoogle = findViewById(R.id.btn_logout_google);
+
         btnLogoutGoogle.setOnClickListener(view -> {
+
             FirebaseUser  user = firebaseAuth.getCurrentUser();
             signOut(); //로그아웃
             updateUI(user);
