@@ -1,13 +1,24 @@
 package com.example.doit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,12 +27,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.doit.databinding.ActivityNavigationBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +52,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
@@ -53,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference();
     private FirebaseUser user;
 
+    //네비게이션 메뉴 추가부분
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActivityNavigationBinding binding;
+
+    //프로필 이미지 텍스트 변경에 쓸 친구들
+    CircleImageView circleView;
+    TextView textView1,textView2;
+    private final int gallayImage =200;
+
     String date;
     private String uid;
     private List<todoList> listDto = new ArrayList<>();
@@ -61,10 +86,50 @@ public class MainActivity extends AppCompatActivity {
 
     HashMap<String, Object> listUpdate = new HashMap<String, Object>();
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //=======================네비게이션 메뉴 추가부분==================
+        binding = ActivityNavigationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.appBarNavigation.toolbar);
+        //toolbar title 제거
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                //페이지 구성
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                .setOpenableLayout(drawer)
+                .build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigation);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+        //==========================네비게이션===========================
+        //============================프로필=============================
+        View header = navigationView.getHeaderView(0);
+        circleView = (CircleImageView)header.findViewById(R.id.CircleView);
+        textView1 = findViewById(R.id.textView1);
+        textView2 = findViewById(R.id.textView2);
+
+        //프로필사진 클릭시 갤러리에서 사진 변경
+        circleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                startActivityForResult(intent,gallayImage);
+
+
+            }
+        });
+//===============================================프로필==========================
+
         //---------------Google 로그인------------------------
         firebaseAuth = FirebaseAuth.getInstance();
         // Google 로그인을 앱에 통합
@@ -197,6 +262,55 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    //메뉴(하트,서치) 추가
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.action_Like:
+                Intent likeIntent = new Intent(this, LikeActivity.class);
+                startActivity(likeIntent);
+                break;
+
+            case R.id.action_Search:
+                Intent searchIntent = new Intent(this, LikeActivity.class);
+                startActivity(searchIntent);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
+    //네비게이션  추가부분
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation, menu);
+
+        return true;
+    }
+    //네비게이션  추가부분
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigation);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+
+    }
+    //프로필
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == gallayImage && resultCode == RESULT_OK && data!= null&& data.getData()!=null){
+            Uri selectedImageUri = data.getData();
+            circleView.setImageURI(selectedImageUri);
+        }
+
     }
     
     /* 로그아웃 */

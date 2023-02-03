@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:showIn="navigation_view">
+    <item android:title="목표"
+        >
+<menu>
+
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="프로필" />
+</menu>
+
+    </item>
+<item android:title="할일" >
+    <menu>
+        <item
+            android:id="@+id/nav_DoitList"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="할일리스트" />
+        <item
+            android:id="@+id/nav_repeat"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="반복 할일" />
+        <item
+            android:id="@+id/like"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="받은 좋아요" />
+
+</menu>
+
+</item>
+
+    <item android:title="계정">
+    <menu>
+
+        <item
+            android:id="@+id/nav_Update"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="정보수정" />
+        <item
+            android:id="@+id/nav_Logout"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="로그아웃" />
+    </menu>
+    </item>
+</menu>
