@@ -20,13 +20,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -59,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private GoogleSignInAccount gsa;
     private Button btnLogoutGoogle;
+
 
     // 파이어베이스 데이터베이스 연동
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -93,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         //=======================네비게이션 메뉴 추가부분==================
         binding = ActivityNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         setSupportActionBar(binding.appBarNavigation.toolbar);
         //toolbar title 제거
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -110,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         //==========================네비게이션===========================
+
         //============================프로필=============================
         View header = navigationView.getHeaderView(0);
         circleView = (CircleImageView)header.findViewById(R.id.CircleView);
@@ -144,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogoutGoogle.setOnClickListener(view -> {
 
-            FirebaseUser  user = firebaseAuth.getCurrentUser();
-            signOut(); //로그아웃
-            updateUI(user);
         });
         //---------------Google 로그인------------------------//
 
@@ -279,6 +274,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(searchIntent);
                 break;
 
+            case R.id.nav_Logout:
+
+                FirebaseUser  user = firebaseAuth.getCurrentUser();
+                Log.d("usertest",user+"");
+                signOut(); //로그아웃
+                Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
+                updateUI(user);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -291,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
-
         return true;
     }
     //네비게이션  추가부분
