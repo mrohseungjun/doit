@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:layout_gravity="center"
+    android:background="#EFECE5"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".LogInActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
         android:layout_marginBottom="80dp"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/todoit_logo_app" />
 
     <EditText
         android:id="@+id/edittext_email"
@@ -42,42 +43,34 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="206dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:background="#ffffff"
-        android:text="로그인" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/SignIn_Button"
-        android:layout_width="209dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:background="@drawable/button_shape"
+        android:text="로그인"
+        android:textColor="#fff" />
+    <!--구글 로그인-->
     <Button
-        android:id="@+id/btn_logout_google"
-        android:layout_width="wrap_content"
+        android:id="@+id/Google_lbtn"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="구글 로그아웃"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.587" />
+        android:text="구글로그인"/>
+    <!--페이스북 로그인-->
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/face_lbtn"
+        android:layout_width="206dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/btn_signup"
-        android:layout_width="wrap_content"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#ffffff"
-        android:text="회원가입" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_shape2"
+        android:text="회원가입"
+        android:textColor="#fff" />
 </LinearLayout>

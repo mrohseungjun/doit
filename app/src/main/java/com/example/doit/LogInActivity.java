@@ -58,7 +58,7 @@ public class LogInActivity extends AppCompatActivity {
     private GoogleSignInAccount gsa;
     private static final String TAG = "FacebookLogin";
 
-    private SignInButton btnGoogleLogin;
+    private Button btnGoogleLogin;
     private Button btnLogoutGoogle;
 
     private FirebaseAuth firebaseAuth;
@@ -80,10 +80,9 @@ public class LogInActivity extends AppCompatActivity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
 
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
+        LoginButton loginButton = findViewById(R.id.face_lbtn);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +115,7 @@ public class LogInActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        btnGoogleLogin = findViewById(R.id.SignIn_Button);
+        btnGoogleLogin = findViewById(R.id.Google_lbtn);
 
         btnGoogleLogin.setOnClickListener(view -> {
             // 기존에 로그인 했던 계정을 확인한다.
@@ -128,10 +127,10 @@ public class LogInActivity extends AppCompatActivity {
                 signIn();
         });
 
-        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
-        btnLogoutGoogle.setOnClickListener(view -> {
-            signOut(); //로그아웃
-        });
+//        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
+//        btnLogoutGoogle.setOnClickListener(view -> {
+//            signOut(); //로그아웃
+//        });
 
 //-------------------------일반 로그인-----------------------------------------------
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
