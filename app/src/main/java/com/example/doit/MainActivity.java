@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
         btnLogoutGoogle = findViewById(R.id.btn_logout_google);
 
         btnLogoutGoogle.setOnClickListener(view -> {
+            signOut(); //로그아웃
+
 
         });
         //---------------Google 로그인------------------------//
@@ -277,10 +279,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_Logout:
 
                 FirebaseUser  user = firebaseAuth.getCurrentUser();
-                Log.d("usertest",user+"");
-                signOut(); //로그아웃
-                Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
                 updateUI(user);
+                Log.d("usertest :",user+"usertest");
+                signOut(); //로그아웃
                 break;
         }
 
@@ -319,6 +320,10 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, task -> {
+                    FirebaseUser  user = firebaseAuth.getCurrentUser();
+                    Log.d("usertest :",user+"");
+                    updateUI(user);
+
                     firebaseAuth.signOut();
                     Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
                     // ...
