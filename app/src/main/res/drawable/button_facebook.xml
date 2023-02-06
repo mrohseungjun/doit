@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners  android:radius="10dp"/>
+    <solid android:color="@color/white"/>
+    <stroke android:width="2dp"/>
+    <stroke android:color="#3083E8"/>
+
+    <item>
+        <bitmap
+            android:src="@drawable/p_icon3"
+            android:gravity="center"/>
+    </item>
+</shape>
