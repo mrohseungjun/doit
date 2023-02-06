@@ -33,15 +33,25 @@ android {
 }
 
 dependencies {
-    implementation 'com.facebook.android:facebook-login:latest.release'//추가 오승준
+    implementation 'com.facebook.android:facebook-login:latest.release'
     implementation 'com.google.firebase:firebase-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:8.0.2'//추가 오승준
+    implementation 'com.github.bumptech.glide:glide:4.11.0' // 지선
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+
+
+
+
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     // Also add the dependency for the Google Play services library and specify its version
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'//추가 오승준
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'

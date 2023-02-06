@@ -35,4 +35,5 @@ public class GalleryFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

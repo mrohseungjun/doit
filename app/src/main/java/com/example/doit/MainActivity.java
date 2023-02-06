@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private GoogleSignInAccount gsa;
-    private Button btnLogoutGoogle;
 
 
     // 파이어베이스 데이터베이스 연동
@@ -71,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     //프로필 이미지 텍스트 변경에 쓸 친구들
     CircleImageView circleView;
-    TextView textView1,textView2;
-    private final int gallayImage =200;
+    TextView textView1, textView2;
+    private final int gallayImage = 200;
 
     String date;
     private String uid;
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         //============================프로필=============================
         View header = navigationView.getHeaderView(0);
-        circleView = (CircleImageView)header.findViewById(R.id.CircleView);
+        circleView = (CircleImageView) header.findViewById(R.id.CircleView);
         textView1 = findViewById(R.id.textView1);
         textView2 = findViewById(R.id.textView2);
 
@@ -120,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
-                startActivityForResult(intent,gallayImage);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, gallayImage);
 
 
             }
@@ -138,13 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        btnLogoutGoogle = findViewById(R.id.btn_logout_google);
-
-        btnLogoutGoogle.setOnClickListener(view -> {
-            signOut(); //로그아웃
-
-
-        });
         //---------------Google 로그인------------------------//
 
         //---------------메인 캘린더---------------------------//
@@ -152,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
         Button btn_save = findViewById(R.id.save_Btn);
         Button btn_updte = findViewById(R.id.update_Btn);
         EditText editText = findViewById(R.id.contextEditText);
-
 
         // todoList에 대한 RecyclerView
         RecyclerView recyclerView1 = findViewById(R.id.recyclerView1);
@@ -191,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null){
+                if (user != null) {
                     uid = user.getUid();
                 }
                 addList(editText.getText().toString(), date, 0, uid);
@@ -223,17 +214,34 @@ public class MainActivity extends AppCompatActivity {
                 btn_updte.setVisibility(View.GONE);
             }
         });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+
+                    case R.id.nav_Logout:
+
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        signOut(); //로그아웃
+                        break;
+                }
+
+                return false;
+            }
+        });
+
     }//~~oncreate
 
     //EditText에 있는 값을 파이어베이스 Realtime database로 넘기는 함수
-    public void addList(String content, String date, int chkId, String uid){
+    public void addList(String content, String date, int chkId, String uid) {
         todoList todoList = new todoList(content, date, chkId, uid);
         databaseReference.child("todoList").push().setValue(todoList);
     }
+
     // 파이어베이스에서 데이터 가져옴
     //옵저버 패턴 --> 변화가 있으면 클라이언트에 알려준다.
     // 데이터를 달력 밑에 출력해주는 함수(날짜별로)
-    public void dateList(RecyclerView recyclerView1, todoListAdapter adapter){
+    public void dateList(RecyclerView recyclerView1, todoListAdapter adapter) {
         database.getReference().child("todoList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -242,11 +250,11 @@ public class MainActivity extends AppCompatActivity {
                 listDto.clear();
                 uidList.clear();
 
-                for(DataSnapshot ds : snapshot.getChildren()) {
-                    todoList  todolistDto = ds.getValue(todoList.class);
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    todoList todolistDto = ds.getValue(todoList.class);
                     String uidKey = ds.getKey();
 
-                    if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(todolistDto.getUid())&&date.equals(todolistDto.getDate())) {
+                    if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(todolistDto.getUid()) && date.equals(todolistDto.getDate())) {
                         listDto.add(todolistDto);
                         uidList.add(uidKey);
                     }
@@ -260,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     //메뉴(하트,서치) 추가
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -272,17 +281,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_Search:
-                Intent searchIntent = new Intent(this, LikeActivity.class);
+                Intent searchIntent = new Intent(this, FindFriendActivity.class);
                 startActivity(searchIntent);
                 break;
 
-            case R.id.nav_Logout:
 
-                FirebaseUser  user = firebaseAuth.getCurrentUser();
-                updateUI(user);
-                Log.d("usertest :",user+"usertest");
-                signOut(); //로그아웃
-                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -297,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.navigation, menu);
         return true;
     }
+
     //네비게이션  추가부분
     @Override
     public boolean onSupportNavigateUp() {
@@ -305,23 +309,24 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
 
     }
+
     //프로필
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == gallayImage && resultCode == RESULT_OK && data!= null&& data.getData()!=null){
+        if (requestCode == gallayImage && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
             circleView.setImageURI(selectedImageUri);
         }
 
     }
-    
+
     /* 로그아웃 */
     private void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, task -> {
-                    FirebaseUser  user = firebaseAuth.getCurrentUser();
-                    Log.d("usertest :",user+"");
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    Log.d("usertest :", user + "");
                     updateUI(user);
 
                     firebaseAuth.signOut();
@@ -330,7 +335,8 @@ public class MainActivity extends AppCompatActivity {
                 });
         gsa = null;
     }
-//    로그아웃 화면 전환
+
+    //    로그아웃 화면 전환
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
             Intent intent = new Intent(this, LogInActivity.class);
